@@ -39,6 +39,13 @@
     <!-- Text appearance sytle for a day of the week tab-->
     <style name="DayOfWeekTabTextAppearance" parent="TextAppearance.Design.Tab">
         <item name="android:textColor">#E0E0E1</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+    <style name="LocationStyle" parent="AppTheme">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:background">@color/sunshine_blue</item>
+        <item name="android:paddingLeft">14dp</item>
     </style>
 
 </resources>

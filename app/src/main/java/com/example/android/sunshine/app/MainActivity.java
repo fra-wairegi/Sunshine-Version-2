@@ -22,6 +22,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.example.android.sunshine.app.sync.SunshineSyncAdapter;
 import com.jakewharton.threetenabp.AndroidThreeTen;
@@ -67,6 +68,9 @@ public class MainActivity extends AppCompatActivity {
         // Code added for TabLayout
         // Set the content of the activity to use the activity_main.xml layout file
         setContentView(R.layout.activity_main);
+
+        TextView textView = (TextView) findViewById(R.id.location);
+        textView.setText(mLocation);
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
 
