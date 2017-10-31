@@ -25,6 +25,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.ShareActionProvider;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -103,6 +104,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         Bundle arguments = getArguments();
         if (arguments != null) {
             mUri = arguments.getParcelable(DetailFragment.DETAIL_URI);
+            Log.v(LOG_TAG,"Inside onCreateView if statement. mUri -> "+ mUri.toString());
         }
 
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
@@ -145,12 +147,14 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
+        Log.v(LOG_TAG, "Inside onActivityCreate");
         getLoaderManager().initLoader(DETAIL_LOADER, null, this);
         super.onActivityCreated(savedInstanceState);
     }
 
     void onLocationChanged( String newLocation ) {
         // replace the uri, since the location has changed
+        Log.v(LOG_TAG, "Inside onLocationChanged");
         Uri uri = mUri;
         if (null != uri) {
             long date = WeatherContract.WeatherEntry.getDateFromUri(uri);
@@ -162,9 +166,20 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+
+
         if ( null != mUri ) {
+            Log.v(LOG_TAG, "Inside onCreateLoader and if statement with int parameter as : "
+                    + id + " and mUri "+ mUri);
             // Now create and return a CursorLoader that will take care of
             // creating a Cursor for the data being displayed.
+            Log.v(LOG_TAG,(new CursorLoader(
+                    getActivity(),
+                    mUri,
+                    DETAIL_COLUMNS,
+                    null,
+                    null,
+                    null)).toString());
             return new CursorLoader(
                     getActivity(),
                     mUri,
@@ -179,9 +194,14 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+
+        Log.v(LOG_TAG,"onLoaderFinished loader parameter: "+loader.toString());
+
         if (data != null && data.moveToFirst()) {
             // Read weather condition ID from cursor
             int weatherId = data.getInt(COL_WEATHER_CONDITION_ID);
+
+            Log.v(LOG_TAG,"Inside onLoadFinished bbbbbbbbbbbbbbbbbb");
 
             // Use weather art image
             mIconView.setImageResource(Utility.getArtResourceForWeatherCondition(weatherId));
@@ -232,6 +252,9 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             if (mShareActionProvider != null) {
                 mShareActionProvider.setShareIntent(createShareForecastIntent());
             }
+        } else {
+
+            Log.v(LOG_TAG, "In Else Data is null!");
         }
     }
 

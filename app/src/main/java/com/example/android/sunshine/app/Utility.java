@@ -20,6 +20,9 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.text.format.Time;
 
+import org.threeten.bp.LocalDateTime;
+import org.threeten.bp.ZoneId;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -245,5 +248,10 @@ public class Utility {
             return R.drawable.art_clouds;
         }
         return -1;
+    }
+
+    public static long convertLocalDateToLong(LocalDateTime localDateTime){
+        ZoneId zoneId = ZoneId.systemDefault();
+        return localDateTime.atZone(zoneId).toInstant().toEpochMilli();
     }
 }

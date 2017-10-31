@@ -19,12 +19,26 @@
     <style name="ActionBar.Solid.Sunshine.NoTitle" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
         <item name="displayOptions">useLogo|showHome</item>
         <item name="logo">@drawable/ic_logo</item>
+        <item name="elevation">0dp</item>
     </style>
 
     <!-- Style for forecast listview -->
     <style name="ForecastListStyle">
         <!-- Here it's a stub.  In screens of sufficient width, this style includes modifications
         for two-pane layout -->
+    </style>
+
+    <!-- Style for a tab that displays the day of the week-->
+    <style name="dayOfWeekTab" parent="Widget.Design.TabLayout">
+        <item name="tabIndicatorColor">@android:color/white</item>
+        <item name="tabSelectedTextColor">@android:color/white</item>
+        <item name="tabTextAppearance">@style/DayOfWeekTabTextAppearance</item>
+        <item name="tabBackground">@color/sunshine_blue</item>
+    </style>
+
+    <!-- Text appearance sytle for a day of the week tab-->
+    <style name="DayOfWeekTabTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="android:textColor">#E0E0E1</item>
     </style>
 
 </resources>

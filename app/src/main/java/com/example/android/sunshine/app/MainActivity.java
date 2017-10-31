@@ -16,15 +16,17 @@
 package com.example.android.sunshine.app;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.android.sunshine.app.sync.SunshineSyncAdapter;
+import com.jakewharton.threetenabp.AndroidThreeTen;
 
-public class MainActivity extends ActionBarActivity implements ForecastFragment.Callback {
+public class MainActivity extends AppCompatActivity {
 
     private final String LOG_TAG = MainActivity.class.getSimpleName();
     private static final String DETAILFRAGMENT_TAG = "DFTAG";
@@ -35,10 +37,11 @@ public class MainActivity extends ActionBarActivity implements ForecastFragment.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AndroidThreeTen.init(this);
         mLocation = Utility.getPreferredLocation(this);
 
         setContentView(R.layout.activity_main);
-        if (findViewById(R.id.weather_detail_container) != null) {
+ /*       if (findViewById(R.id.weather_detail_container) != null) {
             // The detail container view will be present only in the large-screen layouts
             // (res/layout-sw600dp). If this view is present, then the activity should be
             // in two-pane mode.
@@ -58,7 +61,25 @@ public class MainActivity extends ActionBarActivity implements ForecastFragment.
 
         ForecastFragment forecastFragment =  ((ForecastFragment)getSupportFragmentManager()
                 .findFragmentById(R.id.fragment_forecast));
-        forecastFragment.setUseTodayLayout(!mTwoPane);
+        forecastFragment.setUseTodayLayout(!mTwoPane);*/
+
+        // ****************
+        // Code added for TabLayout
+        // Set the content of the activity to use the activity_main.xml layout file
+        setContentView(R.layout.activity_main);
+
+        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+
+        DailyPagerAdapter adapter = new DailyPagerAdapter(getSupportFragmentManager(),this);
+
+        viewPager.setAdapter(adapter);
+
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+        tabLayout.setupWithViewPager(viewPager);
+        // ****************
+
+
 
         SunshineSyncAdapter.initializeSyncAdapter(this);
     }
@@ -86,7 +107,7 @@ public class MainActivity extends ActionBarActivity implements ForecastFragment.
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
+/*    @Override
     protected void onResume() {
         super.onResume();
         String location = Utility.getPreferredLocation( this );
@@ -102,9 +123,9 @@ public class MainActivity extends ActionBarActivity implements ForecastFragment.
             }
             mLocation = location;
         }
-    }
+    }*/
 
-    @Override
+/*    @Override
     public void onItemSelected(Uri contentUri) {
         if (mTwoPane) {
             // In two-pane mode, show the detail view in this activity by
@@ -124,5 +145,5 @@ public class MainActivity extends ActionBarActivity implements ForecastFragment.
                     .setData(contentUri);
             startActivity(intent);
         }
-    }
+    }*/
 }
