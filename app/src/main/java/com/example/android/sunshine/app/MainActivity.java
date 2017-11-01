@@ -23,6 +23,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.sunshine.app.sync.SunshineSyncAdapter;
 import com.jakewharton.threetenabp.AndroidThreeTen;
@@ -36,6 +37,9 @@ public class MainActivity extends AppCompatActivity {
     private String mLocation;
 
     private TextView mTextView;
+
+    private ViewPager mViewPager;
+    private TabLayout mTabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,21 +78,24 @@ public class MainActivity extends AppCompatActivity {
         mTextView = (TextView) findViewById(R.id.location);
         mTextView.setText(mLocation);
 
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+        mViewPager = (ViewPager) findViewById(R.id.viewpager);
 
-        DailyPagerAdapter adapter = new DailyPagerAdapter(getSupportFragmentManager(),this);
+        DailyPagerAdapter adapter = new DailyPagerAdapter(getSupportFragmentManager(), this);
 
-        viewPager.setAdapter(adapter);
+        mViewPager.setAdapter(adapter);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
-        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
-        tabLayout.setupWithViewPager(viewPager);
+        mTabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+        mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+        mTabLayout.setupWithViewPager(mViewPager);
         // ****************
-
 
 
         SunshineSyncAdapter.initializeSyncAdapter(this);
     }
+
+//    private void displayViewPagerAndTabLayout(String location){
+//
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -116,18 +123,21 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        String location = Utility.getPreferredLocation( this );
+        String location = Utility.getPreferredLocation(this);
         // update the location in our second pane using the fragment manager
-            if (location != null && !location.equals(mLocation)) {
-            ForecastFragment ff = (ForecastFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_forecast);
-            if ( null != ff ) {
-                ff.onLocationChanged();
-            }
-            DetailFragment df = (DetailFragment)getSupportFragmentManager().findFragmentByTag(DETAILFRAGMENT_TAG);
-            if ( null != df ) {
-                df.onLocationChanged(location);
-            }
-            mLocation = location;
+        if (location != null && !location.equals(mLocation)) {
+
+            //ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+
+            Toast.makeText(this,"In onResume Method with location as: " + location,Toast.LENGTH_SHORT).show();
+
+            DailyPagerAdapter adapter = new DailyPagerAdapter(getSupportFragmentManager(), this);
+
+            mViewPager.setAdapter(adapter);
+
+           // TabLayout mTabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+           // mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+            mTabLayout.setupWithViewPager(mViewPager);
             mTextView.setText(location);
         }
     }

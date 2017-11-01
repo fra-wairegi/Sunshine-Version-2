@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.util.Log;
+import android.widget.Toast;
 
 import com.example.android.sunshine.app.data.WeatherContract;
 
@@ -51,14 +51,14 @@ public class DailyPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         String locationSetting = Utility.getPreferredLocation(mContext);
+
+        Toast.makeText(mContext, "Value of Location setting is :" + locationSetting,Toast.LENGTH_SHORT).show();
+
        // if (position == 0) {
         LocalDateTime localDateTime = LocalDateTime.now().plusDays(position);
 
 //            Uri detailUri = WeatherContract.WeatherEntry.buildWeatherLocationWithDate(
 //                    locationSetting, cursor.getLong(COL_WEATHER_DATE);
-
-        Log.v("DailyPagerAdapter","LocationSetting -> "+ locationSetting+" || Date -> "+
-                localDateTime.toString()+ " || Position -> " +position);
 
             Uri detailUri = WeatherContract.WeatherEntry.buildWeatherLocationWithDate(
                     locationSetting, Utility.convertLocalDateToLong(localDateTime));
