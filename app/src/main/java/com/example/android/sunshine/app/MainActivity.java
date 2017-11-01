@@ -35,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
     private boolean mTwoPane;
     private String mLocation;
 
+    private TextView mTextView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,8 +71,8 @@ public class MainActivity extends AppCompatActivity {
         // Set the content of the activity to use the activity_main.xml layout file
         setContentView(R.layout.activity_main);
 
-        TextView textView = (TextView) findViewById(R.id.location);
-        textView.setText(mLocation);
+        mTextView = (TextView) findViewById(R.id.location);
+        mTextView.setText(mLocation);
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
 
@@ -111,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-/*    @Override
+    @Override
     protected void onResume() {
         super.onResume();
         String location = Utility.getPreferredLocation( this );
@@ -126,8 +128,9 @@ public class MainActivity extends AppCompatActivity {
                 df.onLocationChanged(location);
             }
             mLocation = location;
+            mTextView.setText(location);
         }
-    }*/
+    }
 
 /*    @Override
     public void onItemSelected(Uri contentUri) {
