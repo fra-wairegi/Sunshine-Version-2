@@ -14,11 +14,21 @@
         <!-- Header: Day, Date -->
         <TextView
             android:fontFamily="sans-serif-condensed"
+            android:id="@+id/detail_cityname_textview"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            android:visibility="gone"/>
+
+        <TextView
+            android:fontFamily="sans-serif-condensed"
             android:id="@+id/detail_day_textview"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:textColor="@color/black"
-            android:textSize="24sp" />
+            android:textSize="24sp"
+            android:visibility="gone"/>
 
         <TextView
             android:fontFamily="sans-serif-condensed"
@@ -26,7 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:textColor="@color/grey_700"
-            android:textSize="16sp" />
+            android:textSize="20sp" />
 
         <!-- Main content: high, low, art, weather state -->
         <LinearLayout

@@ -75,8 +75,13 @@ public class MainActivity extends AppCompatActivity {
         // Set the content of the activity to use the activity_main.xml layout file
         setContentView(R.layout.activity_main);
 
-        mTextView = (TextView) findViewById(R.id.location);
-        mTextView.setText(mLocation);
+        /*
+        Code to set this textView taken the DetailFragment in order to have the city name from the
+        database
+         */
+
+//        mTextView = (TextView) findViewById(R.id.location);
+//        mTextView.setText(mLocation);
 
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
 
@@ -125,20 +130,11 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         String location = Utility.getPreferredLocation(this);
         // update the location in our second pane using the fragment manager
+        Toast.makeText(this,"Inside main activity onResume", Toast.LENGTH_LONG).show();
         if (location != null && !location.equals(mLocation)) {
 
-            //ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-
-            Toast.makeText(this,"In onResume Method with location as: " + location,Toast.LENGTH_SHORT).show();
-
-            DailyPagerAdapter adapter = new DailyPagerAdapter(getSupportFragmentManager(), this);
-
-            mViewPager.setAdapter(adapter);
-
-           // TabLayout mTabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
-           // mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
-            mTabLayout.setupWithViewPager(mViewPager);
-            mTextView.setText(location);
+            //mTextView.setText(location);
+            SunshineSyncAdapter.syncImmediately(this);
         }
     }
 

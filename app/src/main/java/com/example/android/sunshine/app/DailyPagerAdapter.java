@@ -11,7 +11,6 @@ import android.widget.Toast;
 import com.example.android.sunshine.app.data.WeatherContract;
 
 import org.threeten.bp.DayOfWeek;
-import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalDateTime;
 
 import java.util.ArrayList;
@@ -36,8 +35,8 @@ public class DailyPagerAdapter extends FragmentPagerAdapter {
         mTabTitlesList.add("TODAY");
         mTabTitlesList.add("TOMORROW");
         for (int i = 2; i < 7; i++) {
-            LocalDate localDate = LocalDate.now().plusDays(i);
-            DayOfWeek dayOfWeek = localDate.getDayOfWeek();
+            LocalDateTime localDateTime = LocalDateTime.now().plusDays(i);
+            DayOfWeek dayOfWeek = localDateTime.getDayOfWeek();
             mTabTitlesList.add(dayOfWeek.toString());
         }
     }

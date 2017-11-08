@@ -25,6 +25,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.ShareActionProvider;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -33,6 +34,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.sunshine.app.data.WeatherContract;
 import com.example.android.sunshine.app.data.WeatherContract.WeatherEntry;
@@ -67,6 +69,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             WeatherEntry.COLUMN_WEATHER_ID,
             // This works because the WeatherProvider returns location data joined with
             // weather data, even though they're stored in two different tables.
+            WeatherContract.LocationEntry.COLUMN_CITY_NAME,
             WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING
     };
 
@@ -82,7 +85,9 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     public static final int COL_WEATHER_WIND_SPEED = 7;
     public static final int COL_WEATHER_DEGREES = 8;
     public static final int COL_WEATHER_CONDITION_ID = 9;
+    public static final int COL_CITY_NAME = 10;
 
+    private TextView mCityNameView;
     private ImageView mIconView;
     private TextView mFriendlyDateView;
     private TextView mDateView;
@@ -92,6 +97,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     private TextView mHumidityView;
     private TextView mWindView;
     private TextView mPressureView;
+    private TextView mMainActivityLocation; // TextView for the City Name in the Main Activity
 
     public DetailFragment() {
         setHasOptionsMenu(true);
@@ -107,6 +113,12 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         }
 
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
+
+        // Get City TextView Instance from the MainActivity in order to set it with the data from
+        // the database
+        mMainActivityLocation = (TextView) getActivity().findViewById(R.id.location);
+
+        mCityNameView = (TextView) rootView.findViewById(R.id.detail_cityname_textview);
         mIconView = (ImageView) rootView.findViewById(R.id.detail_icon);
         mDateView = (TextView) rootView.findViewById(R.id.detail_date_textview);
         mFriendlyDateView = (TextView) rootView.findViewById(R.id.detail_day_textview);
@@ -150,20 +162,30 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         super.onActivityCreated(savedInstanceState);
     }
 
-    void onLocationChanged( String newLocation ) {
+    @Override
+    public void onResume() {
+        super.onResume();
+        String newLocation = Utility.getPreferredLocation(getActivity());
+        String locationSetting = WeatherContract.WeatherEntry.getLocationSettingFromUri(mUri);
+//        Toast.makeText(getActivity(),"Insided fragment onResume mUri is "+mUri.toString()+ " and new" +
+//                "Location is "+ newLocation + " currentLocation is "+locationSetting, Toast.LENGTH_SHORT).show();
+        if (newLocation != null && !newLocation.equals(locationSetting)) {
+            onLocationChanged(newLocation);
+        }
+    }
+
+    void onLocationChanged(String newLocation ) {
         // replace the uri, since the location has changed
         Uri uri = mUri;
+
+        Log.v(LOG_TAG,"Inside on location changed");
+
         if (null != uri) {
             long date = WeatherContract.WeatherEntry.getDateFromUri(uri);
             Uri updatedUri = WeatherContract.WeatherEntry.buildWeatherLocationWithDate(newLocation, date);
             mUri = updatedUri;
-            updateWeather();
             getLoaderManager().restartLoader(DETAIL_LOADER, null, this);
         }
-    }
-
-    private void updateWeather() {
-        SunshineSyncAdapter.syncImmediately(getActivity());
     }
 
     @Override
@@ -195,11 +217,16 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             // Use weather art image
             mIconView.setImageResource(Utility.getArtResourceForWeatherCondition(weatherId));
 
+            // Read city name from cursor and update the view for city name
+            String cityName = data.getString(COL_CITY_NAME);
+            //mCityNameView.setText(cityName);
+            mMainActivityLocation.setText(cityName);
+
             // Read date from cursor and update views for day of week and date
             long date = data.getLong(COL_WEATHER_DATE);
             String friendlyDateText = Utility.getDayName(getActivity(), date);
             String dateText = Utility.getFormattedMonthDay(getActivity(), date);
-            mFriendlyDateView.setText(friendlyDateText);
+            //mFriendlyDateView.setText(friendlyDateText);
             mDateView.setText(dateText);
 
             // Read description from cursor and update view

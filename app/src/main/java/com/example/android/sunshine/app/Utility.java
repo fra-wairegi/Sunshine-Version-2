@@ -18,6 +18,7 @@ package com.example.android.sunshine.app;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.text.Html;
 import android.text.format.Time;
 
 import org.threeten.bp.LocalDateTime;
@@ -44,13 +45,20 @@ public class Utility {
     public static String formatTemperature(Context context, double temperature) {
         // Data stored in Celsius by default.  If user prefers to see in Fahrenheit, convert
         // the values here.
-        String suffix = "\u00B0";
+        //String suffix = "\u00B0";
+        int formatTemperature = R.string.format_temperature_celsius;
         if (!isMetric(context)) {
             temperature = (temperature * 1.8) + 32;
+            formatTemperature = R.string.format_temperature_fahrenheit;
         }
 
+        String temp = context.getString(formatTemperature);
+        String tempppp = Html.fromHtml(temp).toString();
+
         // For presentation, assume the user doesn't care about tenths of a degree.
-        return String.format(context.getString(R.string.format_temperature), temperature);
+       // return String.format(context.getString(formatTemperature), temperature);
+        return String.format(tempppp, temperature);
+        //return String.format(context.getString(R.string.format_temperature)+suffix, temperature);
     }
 
     static String formatDate(long dateInMilliseconds) {
